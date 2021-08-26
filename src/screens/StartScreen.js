@@ -19,19 +19,20 @@ export default function StartScreen({ navigation }) {
       
     <Image source={require('../assets/UniPoint-unscreen.gif')} style={styles.image} />
     <Paragraph>
-      The easiest way to start with your amazing application.
+      A maneira mais fácil de marcar presença.
+      Entrar como:
     </Paragraph>
     <Button
       mode="contained"
       onPress={() => navigation.navigate('LoginScreen')}
     >
-      Entrar
+      Aluno
     </Button>
     <Button
       mode="outlined"
       onPress={() => navigation.navigate('RegisterScreen')}
     >
-      Cadastrar
+      Professor
     </Button>
   
   </View>

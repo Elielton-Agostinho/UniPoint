@@ -20,39 +20,36 @@ export default function LoginScreen({ navigation }){
   const [password, setPassword] = useState({ value: '', error: '' })
   
   const onLoginPressed = () => {
-    const emailError = emailValidator(email.value)
+    const emailError = passwordValidator(email.value)
     const passwordError = passwordValidator(password.value)
     if (emailError || passwordError) {
       setEmail({ ...email, error: emailError })
       setPassword({ ...password, error: passwordError })
       return
     }
-    const mat = {inputPrimo: 2026439}
 
     //useEffect(() => {
-        const res =  axios.post(`https://unipointapi.heroku.com/primo`,{"inputPrimo": 2026439})//api.post(`/primo`,{inputPrimo: 2026439})
+        const res =  axios.post(`https://unipointapi.herokuapp.com/login`,{"matricula": email.value, "senha":password.value})//api.post(`/primo`,{inputPrimo: 2026439})
           .then(function (response) {
-            console.log(response)
-            //Alert.alert(response.data.matricula);
+            if(response.data.result === true){
+              navigation.reset({
+                index: 0,
+                routes: [{ name: 'Dashboard' }],
+              })
+            }else{
+              Alert.alert('Erro:','Usuário não encontrado.');
+              navigation.goBack;
+            }
+            //console.log(response.data.result);
           })
           .catch(function (error) {
             //Alert.alert('Erro'+error);
             if (error.response) // error from server
               console.log(error)
             else
-              console.log("Error Occured. Please try Again.!") // error from app side
+            Alert.alert(error) // error from app side
           })
 
-          //console.log(res); 
-      
-   // }, [])
-
-  
-    //teste(email.value,password.value);
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Dashboard' }],
-    })
   }
 
   return (
@@ -61,16 +58,16 @@ export default function LoginScreen({ navigation }){
       <Logo />
       <Header>Welcome back.</Header>
       <TextInput
-        label="Email"
+        label="Matrícula"
         returnKeyType="next"
         value={email.value}
         onChangeText={(text) => setEmail({ value: text, error: '' })}
         error={!!email.error}
         errorText={email.error}
         autoCapitalize="none"
-        autoCompleteType="email"
-        textContentType="emailAddress"
-        keyboardType="email-address"
+        autoCompleteType="cc-number"
+        textContentType="username"
+        keyboardType="numeric"
       />
       <TextInput
         label="Password"
