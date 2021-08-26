@@ -1,21 +1,16 @@
-# React Native Login Template
+# UniPoint
 
-This repo is proudly sponsored by:
-
-<a href="https://reactnativemarket.com/" rel="nofollow" target="_blank">
-  <img src="https://raw.githubusercontent.com/venits/react-native-market/master/assets/banner.png" width="280"><br />
-  React Native Templates & Starter Kits and Apps for easier start.
-</a>
+Aplicativo desenvolvido para melhorar o sistema de chamada nas instituições educacionais.
 
 ## Demo
 
-https://simple-login-template.web.app
+https://github.com/Elielton-Agostinho/UniPoint.git
 
-## How to use?
+## Como usar?
 
-1. Download or clone this repo.
+1. Baixe o zip ou faça o clone do repositorio.
 
-2. Install dependencies.
+2. Instale as dependencias.
 
 ```js
 npm install
@@ -23,27 +18,9 @@ npm install
 yarn install
 ```
 
-3. Run project on iOS / Android.
+3. Inicie o projeto no Expo.
 
 ```js
- npm run ios // npm run android
- // or
- yarn ios // yarn android
+ expo start
 ```
 
-## Preview
-
-![homescreen](https://raw.githubusercontent.com/venits/react-native-market/master/assets/simple-login-template/homescreen.png)
-![login](https://raw.githubusercontent.com/venits/react-native-market/master/assets/simple-login-template/login.png)
-![register](https://raw.githubusercontent.com/venits/react-native-market/master/assets/simple-login-template/register.png)
-![forgot](https://raw.githubusercontent.com/venits/react-native-market/master/assets/simple-login-template/forgot.png)
-![dashboard](https://raw.githubusercontent.com/venits/react-native-market/master/assets/simple-login-template/dashboard.png)
-
-## Support
-
-In case of any questions or problems, please contact me at:
-[hello@reactnativemarket.com](mailto:hello@reactnativemarket.com)
-
-### Happy Coding 🚀
-
-### [ReactNativeMarket.com](http://reactnativemarket.com/)
