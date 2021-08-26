@@ -21,17 +21,18 @@ export default function Dashboard({ navigation }) {
     const {success, error} = await LocalAuthentication.authenticateAsync();
 
     if (success) {
-      Alert.alert('Autenticação realizada com sucesso!');
+      Alert.alert("Sucesso:",'Autenticação realizada com sucesso!');
     }else{
-      Alert.alert('Error!');
+      Alert.alert('Error:',error);
     }
-    setIsModalVisible(false);
+    
   }
 
   
   function btnMarcarPresenca(){
     if(Platform.OS === 'ios'){
       authenticate();
+      setIsModalVisible(false);
     }else{
       Platform.OS === 'android' && (
         <Modal
@@ -69,6 +70,11 @@ export default function Dashboard({ navigation }) {
       >
         Marcar Presença
       </Button>
+      <Button
+      mode="contained"
+      onPress={() => navigation.navigate('LoginScreen')}
+    >Voltar
+    </Button>
     </Background>
   )
 }

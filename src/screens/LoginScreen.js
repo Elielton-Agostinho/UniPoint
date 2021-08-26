@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { TouchableOpacity, StyleSheet, View } from 'react-native'
 import { Text } from 'react-native-paper'
 import Background from '../components/Background'
@@ -10,9 +10,12 @@ import BackButton from '../components/BackButton'
 import { theme } from '../core/theme'
 import { emailValidator } from '../helpers/emailValidator'
 import { passwordValidator } from '../helpers/passwordValidator'
+import { Alert } from 'react-native'
+import axios from 'axios'
+import api from '../services/login'
 
 
-export default function LoginScreen({ navigation }) {
+export default function LoginScreen({ navigation }){
   const [email, setEmail] = useState({ value: '', error: '' })
   const [password, setPassword] = useState({ value: '', error: '' })
   
@@ -24,6 +27,28 @@ export default function LoginScreen({ navigation }) {
       setPassword({ ...password, error: passwordError })
       return
     }
+    const mat = {inputPrimo: 2026439}
+
+    //useEffect(() => {
+        const res =  axios.post(`https://unipointapi.heroku.com/primo`,{"inputPrimo": 2026439})//api.post(`/primo`,{inputPrimo: 2026439})
+          .then(function (response) {
+            console.log(response)
+            //Alert.alert(response.data.matricula);
+          })
+          .catch(function (error) {
+            //Alert.alert('Erro'+error);
+            if (error.response) // error from server
+              console.log(error)
+            else
+              console.log("Error Occured. Please try Again.!") // error from app side
+          })
+
+          //console.log(res); 
+      
+   // }, [])
+
+  
+    //teste(email.value,password.value);
     navigation.reset({
       index: 0,
       routes: [{ name: 'Dashboard' }],
