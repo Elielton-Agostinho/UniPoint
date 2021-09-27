@@ -1,0 +1,29 @@
+tela de cadastro sera a tela de login do professor
+
+Tela professor
+	-baterá o ponto do trabalho (  )
+	-habilitar a presença dos alunos por disciplinas ( lista de alunos presencial,
+	lista de alunos remotos - Código para autenticar se o aluno esteve na aula remota
+	código dado pelo porfessor )
+
+Tela do aluno
+	-lista dos dias que recebeu presença ou não
+
+
+Criar uma nova brench
+
+
+
+dash cod
+<Background>
+      <View style={styles.viewTop}>
+        <Image style={styles.bgDash} source={require('../assets/bgDash.png')} style={styles.image} />
+        <Text style={styles.titleText}>Olá Eduardo</Text>
+      </View>
+      <Button
+        mode="contained"
+        onPress={btnMarcarPresenca}
+      >
+        Marcar Presença
+      </Button>
+    </Background>
