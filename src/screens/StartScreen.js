@@ -8,34 +8,36 @@ import Paragraph from '../components/Paragraph'
 export default function StartScreen({ navigation }) {
   return (
     <View style={styles.container}>
-    <View style={styles.bgd}>
-    <ImageBackground
-      source={require('../assets/background_dot2x.png')}
-      resizeMode={'repeat'}
-      style={styles.background}/>  
-    </View>
+      <View style={styles.bgd}>
+      <ImageBackground
+        source={require('../assets/background_dot2x.png')}
+        resizeMode={'repeat'}
+        style={styles.background}/>  
+      </View>
 
     <View style={styles.dados}>
-      
-    <Image source={require('../assets/UniPoint-unscreen.gif')} style={styles.image} />
-    <Paragraph>
-      A maneira mais fácil de marcar presença.
-      Entrar como:
-    </Paragraph>
-    <Button
-      mode="contained"
-      onPress={() => navigation.navigate('LoginScreen')}
-    >
-      Aluno
-    </Button>
-    <Button
-      mode="outlined"
-      onPress={() => navigation.navigate('RegisterScreen')}
-    >
-      Professor
-    </Button>
+      <Image source={require('../assets/img-lr.png')} style={styles.image} />
+      <Paragraph style={styles.textXl}>
+        Um jeito fácil de marcar presença.
+      </Paragraph>
+      <Paragraph style={styles.textRl}>
+        Marcar presença em uma aula ou bater ponto
+        na empresa.
+      </Paragraph>
+      <Button
+        mode="contained"
+        onPress={() => navigation.navigate('LoginScreen')}
+      >
+        Aluno
+      </Button>
+      <Button
+        mode="contained"
+        onPress={() => navigation.navigate('RegisterScreen')}
+      >
+        Professor
+      </Button>
   
-  </View>
+    </View>
   </View>
   )
 }
@@ -50,7 +52,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 350,
-    height: 110,
+    height: 350,
     marginBottom: 8,
   },
   dados: {
@@ -63,6 +65,16 @@ const styles = StyleSheet.create({
     maxWidth: 340,
     backgroundColor:'transparent',
   },
+
+  textXl:{
+    fontSize: 30,
+    marginBottom: 8,
+  },
+
+  textRl:{
+    color: '#414757',
+  },
+
   background: {
     flex: 1,
     maxWidth: 340,

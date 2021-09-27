@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { TouchableOpacity, StyleSheet, View } from 'react-native'
+import { TouchableOpacity, StyleSheet, View, Image } from 'react-native'
 import { Text } from 'react-native-paper'
 import Background from '../components/Background'
 import Logo from '../components/Logo'
@@ -56,7 +56,7 @@ export default function LoginScreen({ navigation }){
     <Background>
       <BackButton goBack={navigation.goBack} />
       <Logo />
-      <Header>Welcome back.</Header>
+      <Header>UniPoint</Header>
       <TextInput
         label="Matrícula"
         returnKeyType="next"
@@ -70,7 +70,7 @@ export default function LoginScreen({ navigation }){
         keyboardType="numeric"
       />
       <TextInput
-        label="Password"
+        label="Senha"
         returnKeyType="done"
         value={password.value}
         onChangeText={(text) => setPassword({ value: text, error: '' })}
@@ -82,18 +82,19 @@ export default function LoginScreen({ navigation }){
         <TouchableOpacity
           onPress={() => navigation.navigate('ResetPasswordScreen')}
         >
-          <Text style={styles.forgot}>Forgot your password?</Text>
+          <Text style={styles.forgot}>Esqueceu sua senha?</Text>
         </TouchableOpacity>
       </View>
-      <Button mode="contained" onPress={onLoginPressed}>
+      <Button mode="contained" onPress={() => navigation.navigate('Dashboard')}>
         Login
       </Button>
       <View style={styles.row}>
-        <Text>Don’t have an account? </Text>
+        <Text>Não tem conta? </Text>
         <TouchableOpacity onPress={() => navigation.replace('RegisterScreen')}>
-          <Text style={styles.link}>Sign up</Text>
+          <Text style={styles.link}>'Faça aqui!'</Text>
         </TouchableOpacity>
       </View>
+      <Image source={require('../assets/ballsbottom.png')} style={styles.image} />
     </Background>
   )
 }
@@ -115,5 +116,10 @@ const styles = StyleSheet.create({
   link: {
     fontWeight: 'bold',
     color: theme.colors.primary,
+  },
+
+  image: {
+    width: "100%",
+    height: 100,
   },
 })
