@@ -1,57 +1,50 @@
-import React, { useEffect, useState } from 'react'
-import { TouchableOpacity, StyleSheet, View, Image } from 'react-native'
-import { Text } from 'react-native-paper'
-import Background from '../components/Background'
-import Logo from '../components/Logo'
-import Header from '../components/Header'
-import Button from '../components/Button'
-import TextInput from '../components/TextInput'
-import BackButton from '../components/BackButton'
-import { theme } from '../core/theme'
-import { emailValidator } from '../helpers/emailValidator'
-import { passwordValidator } from '../helpers/passwordValidator'
-import { Alert } from 'react-native'
-import axios from 'axios'
-import api from '../services/login'
-
+import React, { Component, useEffect, useState } from 'react'
+import { TouchableOpacity, StyleSheet, View, Image,Alert } from 'react-native';
+import { Text } from 'react-native-paper';
+import { emailValidator } from '../helpers/emailValidator';
+import { passwordValidator } from '../helpers/passwordValidator';
+import Background from '../components/Background';
+import Logo from '../components/Logo';
+import Header from '../components/Header';
+import Button from '../components/Button';
+import TextInput from '../components/TextInput';
+import BackButton from '../components/BackButton';
+import { theme } from '../core/theme';
+import onLoginPressed from '../services/login';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default function LoginScreen({ navigation }){
   const [email, setEmail] = useState({ value: '', error: '' })
   const [password, setPassword] = useState({ value: '', error: '' })
+  /*const emailError = passwordValidator(email.value)
+  const passwordError = passwordValidator(password.value)
   
-  const onLoginPressed = () => {
-    const emailError = passwordValidator(email.value)
-    const passwordError = passwordValidator(password.value)
-    if (emailError || passwordError) {
-      setEmail({ ...email, error: emailError })
-      setPassword({ ...password, error: passwordError })
-      return
-    }
-
-    //useEffect(() => {
-        const res =  axios.post(`https://unipointapi.herokuapp.com/login`,{"matricula": email.value, "senha":password.value})//api.post(`/primo`,{inputPrimo: 2026439})
-          .then(function (response) {
-            if(response.data.result === true){
-              navigation.reset({
-                index: 0,
-                routes: [{ name: 'Dashboard' }],
-              })
-            }else{
-              Alert.alert('Erro:','Usuário não encontrado.');
-              navigation.goBack;
-            }
-            //console.log(response.data.result);
-          })
-          .catch(function (error) {
-            //Alert.alert('Erro'+error);
-            if (error.response) // error from server
-              console.log(error)
-            else
-            Alert.alert(error) // error from app side
-          })
-
+  if (emailError || passwordError) {
+    setEmail({ ...email, error: emailError })
+    setPassword({ ...password, error: passwordError })
+    return
+  }*/
+  const [sessao,setSessao] = useState();
+  const Login = async (login,senha) =>{
+    await onLoginPressed(login,senha);
+    
+    // Aguardar 5 segundos
+    setTimeout( function(){
+      AsyncStorage.getItem('matricula').then((result) =>{
+        if(result != 0 && result != null){
+          setSessao(true);
+          navigation.navigate('Dashboard');
+        }else{
+          setSessao(false);
+          Alert.alert('Erro:','Usuário não encontrado!');
+        }
+      }) 
+      console.log('Esse é o primeiro bloco de comandos após 5 segundos');
+    }, 2000 );
+    
+   
   }
-
+  console.log('*****SESSAO:',sessao);
   return (
     <Background>
       <BackButton goBack={navigation.goBack} />
@@ -85,7 +78,9 @@ export default function LoginScreen({ navigation }){
           <Text style={styles.forgot}>Esqueceu sua senha?</Text>
         </TouchableOpacity>
       </View>
-      <Button mode="contained" onPress={() => navigation.navigate('Dashboard')}>
+      <Button mode="contained" onPress={() => {
+        Login(email.value,password.value)
+      }}>
         Login
       </Button>
       <View style={styles.row}>

@@ -1,15 +1,12 @@
 import React,{useState} from 'react'
 import Background from '../components/Background'
-import Logo from '../components/Logo'
-import Header from '../components/Header'
-import Paragraph from '../components/Paragraph'
 import { Text } from 'react-native-paper'
-import Button from '../components/Button'
-import { Alert, Modal, Platform, Touchable, View,StyleSheet, Image } from 'react-native'
+import { Alert, Modal, Platform, Touchable, View,StyleSheet, Image,ImageBackground } from 'react-native'
 import * as LocalAuthentication  from 'expo-local-authentication';
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { styleSheets } from 'min-document'
-import Clock from 'react-digital-clock';
+import AsyncStorage from '@react-native-community/async-storage'
+import Button from '../components/Button'
  
 export default function Dashboard({ navigation }) {
 
@@ -29,6 +26,10 @@ export default function Dashboard({ navigation }) {
     
   }
 
+  function sair(){
+    AsyncStorage.removeItem('matricula');
+    navigation.goBack()
+  }
   
   function btnMarcarPresenca(){
     if(Platform.OS === 'ios'){
@@ -56,46 +57,46 @@ export default function Dashboard({ navigation }) {
       );
     }
   }
-
+  const [value, setValue] = React.useState('left');
   return (
-    <View style={styles.container}>
-      <View style={styles.viewTop}>
-        <Image style={styles.bgDash} source={require('../assets/bgDash.png')} style={styles.image} />
-        <Text style={styles.titleText}>Olá</Text>
-        <Text style={styles.titleText}>Eduardo 😀</Text>
-      </View>
-      <View style={styles.row}>
-        <View style={styles.bellIcon}>  
-          <Image source={require('../assets/bell.png')} style={styles.image} />
+    <Background>
+      <View style={styles.container}>
+        <ImageBackground source={require('../assets/bgDash.png')} style={styles.header}>
+          <Text style={styles.text}>Olá,<br/> Nome do Aluno 😀</Text>
+        </ImageBackground>
+        <View style={styles.body}>
+          <Text style={styles.textLocalization}>Sua Localização: </Text>
+          <View style={styles.viewLocalizacao}>
+            <Image style={styles.menuIcon} source={require('../assets/pin.png')} />  
+            <Text>Localização</Text>
+          </View> 
+          <View style={styles.cardPresenca}>
+            <View style={styles.rowTitle}>
+              <Image style={styles.menuIcon} source={require('../assets/sun.png')} />
+              <Text style={styles.textCardPres}>Disciplina</Text>
+            </View>
+            <View style={styles.rowClock}>
+              <Image style={styles.clockIcon} source={require('../assets/clock.png')}  />
+              
+            </View>
+            <Button style={styles.buttonPresenca} mode="contained" onPress={() => navigation.navigate('Dashboard')}>
+              Marcar presença
+            </Button>
+          </View>
+
+          <Button style={styles.buttonTurmas} onPress={() => navigation.navigate('Dashboard')}>
+            <Image style={styles.image} source={require('../assets/turmas.png')} />
+            Turmas
+          </Button>
+          <Button mode="contained" onPress={() => sair()}
+          goBack={navigation.goBack}>
+            Sair
+          </Button>
         </View>
         
-        <Image style={styles.menuIcon} source={require('../assets/menu.png')} style={styles.image} />
       </View>
-      <View>
-        <Text style={styles.textLocalization}>Sua localização: </Text>
-      </View>
-      <View style={styles.rowLocalization}>
-        <Image style={styles.menuIcon} source={require('../assets/pin.png')} style={styles.image} />
-        <Text style={styles.localization}>Av. Washington Soares, 1321</Text>
-      </View>
-      <View style={styles.cardPresenca}>
-        <View style={styles.rowTitle}>
-          <Image style={styles.menuIcon} source={require('../assets/sun.png')} style={styles.image} />
-          <Text style={styles.textCardPres}>Horário</Text>
-        </View>
-        <View style={styles.rowClock}>
-          <Image style={styles.clockIcon} source={require('../assets/clock.png')} style={styles.image} />
-          
-        </View>
-        <Button style={styles.buttonPresenca} mode="contained" onPress={() => navigation.navigate('Dashboard')}>
-          Marcar presença
-        </Button>
-      </View>
-      <Button style={styles.buttonTurmas} onPress={() => navigation.navigate('Dashboard')}>
-        <Image style={styles.TurmasIcon} source={require('../assets/turmas.png')} style={styles.image} />
-        Turmas
-      </Button>
-    </View>
+      
+    </Background>
   )
 }
 
@@ -103,9 +104,47 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
-    maxWidth: 340,
-    backgroundColor:'transparent',
-    
+    flexDirection: 'column',
+  },
+  header: {
+    flex: 1,
+    width: '100%',
+    height: 160,
+    paddingTop:25,
+    bottom:'-20',
+    resizeMode: 'contain',
+  },
+  text: {
+    color: 'white',
+    fontSize: 22,
+    fontWeight: 'bold',
+    textAlign: 'left',
+    bottom:0,
+    //backgroundColor: '#000000a0',
+  },
+  viewLocalizacao:{
+    flex: 1,
+    width: '100%',
+    flexDirection: 'row'
+  },
+  menuIcon:{
+    width:10,
+    height:10,
+  },
+  inputContainer: {
+    flex: 1,
+    marginTop: 0,
+    top: 0,
+    width: '100%'
+  },
+  body: {
+    flex: 1,
+    marginTop: '-140%',
+    padding:'5%',
+    borderTopRightRadius:15,
+    borderTopLeftRadius:15,
+    width: '100%',
+    backgroundColor: '#fff',
   },
   modal:{
     backgroundColor: '#333',
@@ -132,21 +171,12 @@ const styles = StyleSheet.create({
     top: -100,
     left: 10,
   },
-
-  bgDash:{
-    resizeMode: 'cover',
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
-    width: '100%',
-    height: '100%', 
-  },
   viewTop:{
     top: 0,
     left: 0, 
     right: 0, 
     bottom: 0,
+    //width: '100%',
   },
   bellIcon:{
     
@@ -154,14 +184,15 @@ const styles = StyleSheet.create({
   row: {
     width: 130,
     flexDirection: 'row',
-    top: -190,
+    top: 1190,
     left: 235,
     justifyContent: 'space-evenly',
   },  
   textLocalization:{
     color: "#777777",
-    top: -100,
-    left: 12,
+    //marginTop: '5%',
+    //marginLeft: '5%',
+    fontSize: 14,
   },
   rowLocalization:{
     width: 220,
@@ -174,12 +205,13 @@ const styles = StyleSheet.create({
   cardPresenca:{
     flex: 1,
     backgroundColor: "#E2EAF6",
-    width: '92%',
+    width: '100%',
     maxHeight: 230,
     alignSelf: 'center',
     justifyContent: 'center',
     borderRadius: 20,
-    top: -70,
+    top: '-25%',
+    bottom:'-20%',
   },
   rowTitle:{
     width: 130,
@@ -208,7 +240,10 @@ const styles = StyleSheet.create({
   buttonTurmas:{
     backgroundColor: "#fff",
     alignSelf: 'center',
-    width: '92%',
+    width: '100%',
+    //marginTop:'-20%',
+    borderWidth: 3,
+    borderColor: "#060A39",
     justifyContent: 'space-between'
   }
 
