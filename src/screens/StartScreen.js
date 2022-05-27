@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   bgd: {
     flex: 0,
     width: '100%',
-    maxWidth: 340,
+    //maxWidth: 340,
     backgroundColor:'#000000',
     opacity:1,
   },
@@ -57,12 +57,11 @@ const styles = StyleSheet.create({
   },
   dados: {
     flex: 1,
-    width: '100%',
+    width: '90%',
     alignItems: 'center',
     justifyContent: 'center',
     marginLeft:80,
     padding: 10,
-    maxWidth: 340,
     backgroundColor:'transparent',
   },
 
@@ -82,9 +81,10 @@ const styles = StyleSheet.create({
     height: 1024,
   },
   container: {
-    flex: 1,
+    flex: '100%',
     width: '100%',
-    maxWidth: 340,
+    //maxWidth: 340,
+    marginLeft:'-10%',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor:'transparent',

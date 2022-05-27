@@ -5,7 +5,7 @@ import { Alert, Modal, Platform, Touchable, View,StyleSheet, Image,ImageBackgrou
 import * as LocalAuthentication  from 'expo-local-authentication';
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { styleSheets } from 'min-document'
-import AsyncStorage from '@react-native-community/async-storage'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import Button from '../components/Button'
  
 export default function Dashboard({ navigation }) {
@@ -32,6 +32,7 @@ export default function Dashboard({ navigation }) {
   }
   
   function btnMarcarPresenca(){
+    console.log('******Entrouuu')
     if(Platform.OS === 'ios'){
       authenticate();
       setIsModalVisible(false);
@@ -62,7 +63,7 @@ export default function Dashboard({ navigation }) {
     <Background>
       <View style={styles.container}>
         <ImageBackground source={require('../assets/bgDash.png')} style={styles.header}>
-          <Text style={styles.text}>Olá,<br/> Nome do Aluno 😀</Text>
+          <Text style={styles.text}>Olá, Nome do Aluno 😀</Text>
         </ImageBackground>
         <View style={styles.body}>
           <Text style={styles.textLocalization}>Sua Localização: </Text>
@@ -79,7 +80,7 @@ export default function Dashboard({ navigation }) {
               <Image style={styles.clockIcon} source={require('../assets/clock.png')}  />
               
             </View>
-            <Button style={styles.buttonPresenca} mode="contained" onPress={() => navigation.navigate('Dashboard')}>
+            <Button style={styles.buttonPresenca} mode="contained" onPress={() => btnMarcarPresenca()}>
               Marcar presença
             </Button>
           </View>
@@ -102,7 +103,7 @@ export default function Dashboard({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: '100%',
     width: '100%',
     flexDirection: 'column',
   },
@@ -111,7 +112,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 160,
     paddingTop:25,
-    bottom:'-20',
+    //bottom:'-20',
     resizeMode: 'contain',
   },
   text: {
