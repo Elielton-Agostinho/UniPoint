@@ -32,7 +32,7 @@ export default function StartScreen({ navigation }) {
       </Button>
       <Button
         mode="contained"
-        onPress={() => navigation.navigate('RegisterScreen')}
+        onPress={() => navigation.navigate('LoginProfessor')}
       >
         Professor
       </Button>

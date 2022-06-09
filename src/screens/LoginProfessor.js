@@ -10,34 +10,26 @@ import Button from '../components/Button';
 import TextInput from '../components/TextInput';
 import BackButton from '../components/BackButton';
 import { theme } from '../core/theme';
-import onLoginPressed from '../services/login';
+import onLoginPressed from '../services/loginP';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-export default function LoginScreen({ navigation }){
+export default function LoginProfessor({ navigation }){
   const [email, setEmail] = useState({ value: '', error: '' })
   const [password, setPassword] = useState({ value: '', error: '' })
-  /*const emailError = passwordValidator(email.value)
-  const passwordError = passwordValidator(password.value)
-  
-  if (emailError || passwordError) {
-    setEmail({ ...email, error: emailError })
-    setPassword({ ...password, error: passwordError })
-    return
-  }*/
   const [sessao,setSessao] = useState();
   const Login = async (login,senha) =>{
     await onLoginPressed(login,senha);
     
     // Aguardar 5 segundos
     setTimeout( function(){
-      AsyncStorage.getItem('matricula').then((result) =>{
+      AsyncStorage.getItem('matriculaP').then((result) =>{
         console.log(result);
         if(result == 0 || result == null || result == '003141'){
           setSessao(false);
           Alert.alert('Erro:','Usuário não encontrado!');
         }else{
           setSessao(true);
-          navigation.navigate('Dashboard');
+          navigation.navigate('DashboardProfessor');
           
         }
       }) 

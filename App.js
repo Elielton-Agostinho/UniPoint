@@ -6,9 +6,11 @@ import { theme } from './src/core/theme'
 import {
   StartScreen,
   LoginScreen,
+  LoginProfessor,
   RegisterScreen,
   ResetPasswordScreen,
   Dashboard,
+  DashboardProfessor,
 } from './src/screens'
 
 const Stack = createStackNavigator()
@@ -25,8 +27,10 @@ export default function App() {
         >
           <Stack.Screen name="StartScreen" component={StartScreen} />
           <Stack.Screen name="LoginScreen" component={LoginScreen} />
+          <Stack.Screen name="LoginProfessor" component={LoginProfessor} />
           <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
           <Stack.Screen name="Dashboard" component={Dashboard} />
+          <Stack.Screen name="DashboardProfessor" component={DashboardProfessor} />
           <Stack.Screen
             name="ResetPasswordScreen"
             component={ResetPasswordScreen}

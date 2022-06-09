@@ -7,12 +7,12 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { styleSheets } from 'min-document'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Button from '../components/Button'
-import {getUsuario,Horario,AptoMarcacao} from '../controllers/DashboardController'
+import {getUsuario,Horario,AptoMarcacao} from '../controllers/DashboardControllerProfessor';
 import {getPonto} from '../services/disciplinas';
 import {marcarPresenca} from '../services/Presenca';
-import {getNomeAluno} from '../services/NomeAluno';
+import {getNomeProfessor} from '../services/NomeProfessor';
  
-export default function Dashboard({ navigation }) {
+export default function DashboardProfessor({ navigation }) {
 
   const [isModalVisible, setIsModalVisible] = useState(true);
   const [nome, setNome] = useState();
@@ -25,9 +25,9 @@ export default function Dashboard({ navigation }) {
   const [chamada, setChamada] = useState();
 
   async function prerender(){
-    AsyncStorage.getItem('matricula').then((result) =>{
+    AsyncStorage.getItem('matriculaP').then((result) =>{
       setUser(result);
-      getNomeAluno(result).then(function(response){
+      getNomeProfessor(result).then(function(response){
         setNome(response);
       });
     }) 
@@ -36,6 +36,7 @@ export default function Dashboard({ navigation }) {
     //if(user != undefined){
       try {
         await Horario(user).then(function(response){
+          console.log(response);
           setDisciplinas(response[0]);
           if(response[0] == undefined || response[0] == '' || response[0] == 0){
             setHora(false);
@@ -44,7 +45,7 @@ export default function Dashboard({ navigation }) {
             setChamada(response[0].CHAMADA);
             if(disciplinas != 0 || disciplinas['ID'] != undefined){
               console.log('########ID_DISCIPLINA: ',disciplinas['ID']);
-              AptoMarcacao(disciplinas['ID']).then(function(response2){
+              AptoMarcacao(user,disciplinas['ID'],disciplinas['COD_DISC']).then(function(response2){
                 setIdDisc(disciplinas['ID']);
                 console.log('*****Resposta_AptoMarcacao: ',response2);
                 setHabilitarMarcacao(response2);
@@ -54,14 +55,14 @@ export default function Dashboard({ navigation }) {
             let arrayOb = [];
             console.log(user);
                 let ponto = getPonto(user).then(function(resposta){
-                  console.log('*****ponto: ',resposta);
+                  //console.log('*****ponto: ',resposta);
                   for (let index = 0; index < resposta.length; index++) {
                     let data = new Date(resposta[index].DATA);
                     let dataAjustada = data.getDate() + ' / ' + (data.getMonth() + 1 )+ ' / ' + data.getFullYear() + ' - ' + data.getHours()+':'+data.getMinutes();
                     arrayOb.push({'COD_DISC':resposta[index].COD_DISC,'DATA':dataAjustada});
                   }
                   setItemsPonto(arrayOb);
-                  console.log('*****ponto: ',arrayOb);
+                  //console.log('*****ponto: ',arrayOb);
                 });
           }
         });
@@ -155,10 +156,9 @@ export default function Dashboard({ navigation }) {
       );
     }
     console.log('****ID_DISCIPLINA: ',idDisc);
-    //marcarPresenca(user,);
+    
   }
   const [value, setValue] = React.useState('left');
-  //console.log('********STATE_NOME: ',nome);
   return (
     
     <Background>
@@ -182,12 +182,12 @@ export default function Dashboard({ navigation }) {
             </View>
             <View style={styles.rowClock}>
               <Image style={styles.clockIcon} source={require('../assets/clock.png')}  />
-              <Text style={styles.textCardPres}>{hora}</Text>
+              <Text style={styles.textTitCardPres}>{hora}</Text>
             </View>
             {habilitarMarcacao == true ? (<Button style={styles.buttonPresenca} mode="contained" onPress={() => btnMarcarPresenca()}>
-              Marcar presença
+              Habilitar Chamada
             </Button>) : (<Button style={styles.buttonPresenca}  enabled="false" mode="contained">
-              Disciplina não liberada
+              Desabilitar Chamada
             </Button>)}
             
           </View>
@@ -353,7 +353,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
     borderRadius: 20,
-    top:'-80%',
+    top:'-10%',
     //top: '-60%',
     //bottom:'-20%',
   },
@@ -364,6 +364,11 @@ const styles = StyleSheet.create({
     top: 10,
     padding: 5,
     justifyContent: 'space-evenly',
+  },
+  textTitCardPres:{
+    top:5,
+    fontSize: 25,
+    color: "#777777",
   },
   textCardPres:{
     fontSize: 22,

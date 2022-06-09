@@ -43,6 +43,7 @@
     "react-native-web": "0.17.7",
     "react-navigation": "^4.4.4",
     "redux": "^4.2.0",
+    "sync-storage": "^0.4.2",
     "tls": "^0.0.1",
     "util": "^0.12.4"
   },

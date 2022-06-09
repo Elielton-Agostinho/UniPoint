@@ -4,7 +4,7 @@ function onLoginPressed(login,senha){
 
     console.log("onLoginPressed");
 
-    let res = fetch('https://unipointapi.herokuapp.com/login/', {
+    let res = fetch('https://unipointapi.herokuapp.com/loginProf/', {
         method: 'POST',
         Accept: 'application/json',
         headers: {
@@ -25,7 +25,7 @@ function onLoginPressed(login,senha){
         console.log(responseData.result);
         if(responseData.result === true){
             //const sessao = sessionStorage.setItem('matricula', login);  
-            const session2 = AsyncStorage.setItem('matricula',login);
+            const session2 = AsyncStorage.setItem('matriculaP',login);
         }else{
             //const session2 = AsyncStorage.setItem('matricula',null);
         }
