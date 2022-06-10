@@ -173,37 +173,39 @@ export default function Dashboard({ navigation }) {
             <Image style={styles.menuIcon} source={require('../assets/pin.png')} />  
             <Text>Av. Antônio Justa, 3779 - Meireles - Fortaleza</Text>
           </View>
-          <View>
-          {hora == false ? null : (
-            <View style={styles.cardPresenca}>
-            <View style={styles.rowTitle}>
-              <Image style={styles.menuIcon} source={require('../assets/sun.png')} />
-              <Text style={styles.textCardPres}>Disciplina</Text>
-            </View>
-            <View style={styles.rowClock}>
-              <Image style={styles.clockIcon} source={require('../assets/clock.png')}  />
-              <Text style={styles.textCardPres}>{hora}</Text>
-            </View>
-            {habilitarMarcacao == true ? (<Button style={styles.buttonPresenca} mode="contained" onPress={() => btnMarcarPresenca()}>
-              Marcar presença
-            </Button>) : (<Button style={styles.buttonPresenca}  enabled="false" mode="contained">
-              Disciplina não liberada
-            </Button>)}
+          <View style={{top:'89%'}}>
+            {hora == false ? null : (
+              <View style={styles.cardPresenca}>
+                <View style={styles.rowTitle}>
+                  <Image style={styles.menuIcon} source={require('../assets/sun.png')} />
+                  <Text style={styles.textCardPres}>Disciplina</Text>
+                </View>
+                <View style={styles.rowClock}>
+                  <Image style={styles.clockIcon} source={require('../assets/clock.png')}  />
+                  <Text style={styles.textCardPres}>{hora}</Text>
+                </View>
+                {habilitarMarcacao == true ? (<Button style={styles.buttonPresenca} mode="contained" onPress={() => btnMarcarPresenca()}>
+                  Marcar presença
+                </Button>) : (<Button style={styles.buttonPresenca}  enabled="false" mode="contained" disabled={true}>
+                  Disciplina não liberada
+                </Button>)}
+                
+              </View>
             
+            )}
+            <View style={{top:'-80%'}}>
+              <Button style={styles.buttonTurmas}>
+                <Image style={styles.image} source={require('../assets/turmas.png')} />
+                  Marcações
+              </Button>
+              <FlatList
+              style={{height:340,maxHeight:340}}
+              data={itemsPonto}
+              renderItem={({item}) => <Text style={styles.item}>Disciplina: {item.COD_DISC} | 
+                                          Data: {item.DATA}</Text>}
+              />
+            </View>
           </View>
-          
-          )}
-          
-          <Button style={styles.buttonTurmas}>
-            <Image style={styles.image} source={require('../assets/turmas.png')} />
-               Marcações
-          </Button>
-          <FlatList
-          data={itemsPonto}
-          renderItem={({item}) => <Text style={styles.item}>Disciplina: {item.COD_DISC} | 
-                                      Data: {item.DATA}</Text>}
-        />
-        </View>
 
           
           
@@ -211,7 +213,7 @@ export default function Dashboard({ navigation }) {
         <Button style={styles.sair} mode="contained" onPress={() => sair()}
           goBack={navigation.goBack}>
             Sair
-          </Button>
+          </Button> 
       </View>
       
     </Background>
@@ -353,7 +355,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
     borderRadius: 20,
-    top:'-80%',
+    top:'-90%',
     //top: '-60%',
     //bottom:'-20%',
   },

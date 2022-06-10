@@ -8,9 +8,11 @@ import { styleSheets } from 'min-document'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Button from '../components/Button'
 import {getUsuario,Horario,AptoMarcacao} from '../controllers/DashboardControllerProfessor';
-import {getPonto} from '../services/disciplinas';
+import {getPonto} from '../services/AlunosPorDisciplina';
 import {marcarPresenca} from '../services/Presenca';
 import {getNomeProfessor} from '../services/NomeProfessor';
+import {habilitar} from '../services/HabilitarMarcacao';
+import {desabilitar} from '../services/DesabilitarMarcacao';
  
 export default function DashboardProfessor({ navigation }) {
 
@@ -23,6 +25,8 @@ export default function DashboardProfessor({ navigation }) {
   const [itemsPonto, setItemsPonto] = useState();
   const [idDisc, setIdDisc] = useState();
   const [chamada, setChamada] = useState();
+  const [botaoBlock, setBotaoBlock] = useState(false);
+  
 
   async function prerender(){
     AsyncStorage.getItem('matriculaP').then((result) =>{
@@ -31,9 +35,6 @@ export default function DashboardProfessor({ navigation }) {
         setNome(response);
       });
     }) 
-    //let nome = getUsuario(user);
-     
-    //if(user != undefined){
       try {
         await Horario(user).then(function(response){
           console.log(response);
@@ -53,16 +54,18 @@ export default function DashboardProfessor({ navigation }) {
               });
             }else{setHabilitarMarcacao(false);setHora(false);}
             let arrayOb = [];
-            console.log(user);
-                let ponto = getPonto(user).then(function(resposta){
-                  //console.log('*****ponto: ',resposta);
-                  for (let index = 0; index < resposta.length; index++) {
-                    let data = new Date(resposta[index].DATA);
-                    let dataAjustada = data.getDate() + ' / ' + (data.getMonth() + 1 )+ ' / ' + data.getFullYear() + ' - ' + data.getHours()+':'+data.getMinutes();
-                    arrayOb.push({'COD_DISC':resposta[index].COD_DISC,'DATA':dataAjustada});
+            //console.log(user);
+                let ponto = getPonto(user,idDisc).then(function(resposta){
+                  if (resposta == 0) {
+                    arrayOb.push({'MATRICULA':0,'ALUNO':'Nenhuma Presença Registrada'});
+                  } else {
+                    for (let index = 0; index < resposta.length; index++) {
+                      arrayOb.push({'MATRICULA':resposta[index].MATRICULA,'ALUNO':resposta[index].NOME});
+                    }
                   }
+                  
                   setItemsPonto(arrayOb);
-                  //console.log('*****ponto: ',arrayOb);
+                  console.log('*****ponto: ',arrayOb);
                 });
           }
         });
@@ -73,55 +76,51 @@ export default function DashboardProfessor({ navigation }) {
     //setNome(nome);
   }
   
-  
   useEffect(() => {
     prerender();
   },[hora]);
 
-  async function ponto(){
-    let arrayOb = [];
-    console.log(user);
-    let ponto = await getPonto(user).then(function(resposta){
-      console.log('*****ponto: ',resposta);
-      for (let index = 0; index < resposta.length; index++) {
-        let data = new Date(resposta[index].DATA);
-        let dataAjustada = data.getDate() + ' / ' + (data.getMonth() + 1 )+ ' / ' + data.getFullYear() + ' - ' + data.getHours()+':'+data.getMinutes();
-        arrayOb.push({'COD_DISC':resposta[index].COD_DISC,'DATA':dataAjustada});
+  async function habilitarPresenca(){
+    let v = habilitar(idDisc,user).then(function(response){
+      setHabilitarMarcacao(false);
+      console.log(response);
+      if (response == 0) {
+        Alert.alert("Sucesso:",'Disciplina Liberada para Presença!'); 
+      } else {
+        Alert.alert("Error:",'Não Conseguimos Efetuar a Liberação da Disciplina'); 
       }
-      setItemsPonto(arrayOb);
-      console.log('*****ponto: ',arrayOb);
+      ponto();
     });
   }
 
-  async function authenticate(){
-    const hasPassword = await LocalAuthentication.isEnrolledAsync();
-    console.log('********Localização: ',hasPassword);
-    if(!hasPassword) return;
-
-    const {success, error} = await LocalAuthentication.authenticateAsync();
-
-    if (success) {
-      let data = new Date();
-      try { 
-        let marcacao = await marcarPresenca(user,chamada,'E',data).then(function(res){
-          setHabilitarMarcacao(res);
-          if(res == true){
-            Alert.alert("ERROR:",'Não foi possivel registrar a presença, favor tentar novamente.');
-          }else{
-            ponto();
-          }
-
-        });
-        console.log('******MARCACAO: ',marcacao);
-      } catch (error) {
-        console.log('******ERROR_MARCACAO: ',error)
+  async function desabilitarPresenca(){
+    let v = desabilitar(chamada).then(function(response){
+      setBotaoBlock(true);
+      console.log(response);
+      if (response == 0) {
+        Alert.alert("Sucesso:",'Disciplina Fechada para Presença!'); 
+      } else {
+        Alert.alert("Error:",'Não Conseguimos Fechar a Disciplina!'); 
       }
-      
-      Alert.alert("Sucesso:",'Autenticação realizada com sucesso!');
-    }else{
-      Alert.alert('Error:',error);
-    }
-    
+      ponto();
+    });
+  }
+
+  async function ponto(){
+    let arrayOb = [];
+            //console.log(user);
+                let ponto = getPonto(user,idDisc).then(function(resposta){
+                  if (resposta == 0) {
+                    arrayOb.push({'MATRICULA':0,'ALUNO':'Nenhuma Presença Registrada'});
+                  } else {
+                    for (let index = 0; index < resposta.length; index++) {
+                      arrayOb.push({'MATRICULA':resposta[index].MATRICULA,'ALUNO':resposta[index].NOME});
+                    }
+                  }
+                  
+                  setItemsPonto(arrayOb);
+                  //console.log('*****ponto: ',arrayOb);
+                });
   }
 
   function sair(){
@@ -129,35 +128,6 @@ export default function DashboardProfessor({ navigation }) {
     navigation.goBack()
   }
   
-  function btnMarcarPresenca(){
-    console.log('******Entrouuu')
-    if(Platform.OS === 'ios'){
-      authenticate();
-      setIsModalVisible(false);
-    }else{
-      Platform.OS === 'android' && (
-        <Modal
-          animationType='slide'
-          transparent={true}
-          visible={isModalVisible}
-          onShow={authenticate}
-        >
-          <View style={styleSheets.modal}>
-            <Text style={styleSheets.authText}>Autentique-se utilizando sua digital</Text>
-            <TouchableOpacity onPress={() =>{
-            LocalAuthentication.cancelAuthenticate();
-            setIsModalVisible(false);
-            }}>
-            <Text style={styleSheets.cancel}>Cancelar</Text>
-          </TouchableOpacity>
-          </View>
-          
-        </Modal>
-      );
-    }
-    console.log('****ID_DISCIPLINA: ',idDisc);
-    
-  }
   const [value, setValue] = React.useState('left');
   return (
     
@@ -173,41 +143,40 @@ export default function DashboardProfessor({ navigation }) {
             <Image style={styles.menuIcon} source={require('../assets/pin.png')} />  
             <Text>Av. Antônio Justa, 3779 - Meireles - Fortaleza</Text>
           </View>
-          <View>
-          {hora == false ? null : (
-            <View style={styles.cardPresenca}>
-            <View style={styles.rowTitle}>
-              <Image style={styles.menuIcon} source={require('../assets/sun.png')} />
-              <Text style={styles.textCardPres}>Disciplina</Text>
+          <View style={{top:'80%'}}>
+            {hora == false ? null : (
+              <View style={styles.cardPresenca}>
+                <View style={styles.rowTitle}>
+                  <Image style={styles.menuIcon} source={require('../assets/sun.png')} />
+                  <Text style={styles.textCardPres}>Disciplina</Text>
+                </View>
+                <View style={styles.rowClock}>
+                  <Image style={styles.clockIcon} source={require('../assets/clock.png')}  />
+                  <Text style={styles.textTitCardPres}>{hora}</Text>
+                </View>
+                {habilitarMarcacao == true ? (<Button style={styles.buttonPresenca} mode="contained" onPress={() => habilitarPresenca()}>
+                  Habilitar Chamada
+                </Button>) : (<Button style={styles.buttonPresenca}  enabled="false" mode="contained" onPress={() => desabilitarPresenca()} disabled={botaoBlock} >
+                  Desabilitar Chamada
+                </Button>)}
+               
+              </View>
+             
+            )}
+            <View style={{top:'-60%'}}>
+              <Button style={styles.buttonTurmas} onPress={()=> ponto()}>
+                <Image style={styles.image} source={require('../assets/turmas.png')} />  Alunos Presentes  <Image style={styles.image} source={require('../assets/turmas.png')} /> 
+              </Button>
+              <FlatList
+              style={{height:340,maxHeight:340}}
+              data={itemsPonto}
+              renderItem={({item}) => <Text style={styles.item}>{item.MATRICULA} - {item.ALUNO}</Text>}
+              />
             </View>
-            <View style={styles.rowClock}>
-              <Image style={styles.clockIcon} source={require('../assets/clock.png')}  />
-              <Text style={styles.textTitCardPres}>{hora}</Text>
-            </View>
-            {habilitarMarcacao == true ? (<Button style={styles.buttonPresenca} mode="contained" onPress={() => btnMarcarPresenca()}>
-              Habilitar Chamada
-            </Button>) : (<Button style={styles.buttonPresenca}  enabled="false" mode="contained">
-              Desabilitar Chamada
-            </Button>)}
-            
           </View>
-          
-          )}
-          
-          <Button style={styles.buttonTurmas}>
-            <Image style={styles.image} source={require('../assets/turmas.png')} />
-               Marcações
-          </Button>
-          <FlatList
-          data={itemsPonto}
-          renderItem={({item}) => <Text style={styles.item}>Disciplina: {item.COD_DISC} | 
-                                      Data: {item.DATA}</Text>}
-        />
-        </View>
 
-          
-          
         </View>
+        
         <Button style={styles.sair} mode="contained" onPress={() => sair()}
           goBack={navigation.goBack}>
             Sair
@@ -353,7 +322,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
     borderRadius: 20,
-    top:'-10%',
+    top:'-80%',
     //top: '-60%',
     //bottom:'-20%',
   },
@@ -394,7 +363,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignSelf: 'center',
     width: '100%',
-    //marginTop:'-10%',
+    //top:'-60%',
     borderWidth: 3,
     borderColor: "#060A39",
     justifyContent: 'space-between'

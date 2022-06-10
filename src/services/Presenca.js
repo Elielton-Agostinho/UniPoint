@@ -17,7 +17,7 @@ export async function marcarPresenca(aluno,disciplina,tipo,horario){
             horario: horario
         })
     })
-    .then(response => { return response.json();})
+    .then(response => { return response;})
     .then(responseData => {
         //let resultado = 0;
         //console.log(responseData[0].vazio);
