@@ -24,6 +24,15 @@ export default function Dashboard({ navigation }) {
   const [idDisc, setIdDisc] = useState();
   const [chamada, setChamada] = useState();
 
+  async function validaDiciplina(){
+    console.log('########ID_DISCIPLINA: ',disciplinas['ID']);
+    AptoMarcacao(disciplinas['ID']).then(function(response2){
+      setIdDisc(disciplinas['ID']);
+      console.log('*****Resposta_AptoMarcacao: ',response2);
+      setHabilitarMarcacao(response2);
+    });
+  }
+
   async function prerender(){
     AsyncStorage.getItem('matricula').then((result) =>{
       setUser(result);
@@ -42,15 +51,9 @@ export default function Dashboard({ navigation }) {
           }else{
             setHora(response[0].NOME + ' ('+response[0].COD_DISC+')');
             setChamada(response[0].CHAMADA);
-            if(disciplinas != 0 || disciplinas['ID'] != undefined){
-              console.log('########ID_DISCIPLINA: ',disciplinas['ID']);
-              AptoMarcacao(disciplinas['ID']).then(function(response2){
-                setIdDisc(disciplinas['ID']);
-                console.log('*****Resposta_AptoMarcacao: ',response2);
-                setHabilitarMarcacao(response2);
-
-              });
-            }else{setHabilitarMarcacao(false);setHora(false);}
+            if(disciplinas == 0 || disciplinas['ID'] == undefined){
+              setHabilitarMarcacao(false);setHora(false);
+            }
             let arrayOb = [];
             console.log(user);
                 let ponto = getPonto(user).then(function(resposta){
@@ -104,6 +107,7 @@ export default function Dashboard({ navigation }) {
       try { 
         let marcacao = await marcarPresenca(user,chamada,'E',data).then(function(res){
           setHabilitarMarcacao(res);
+          console.log('******MARCACAO: ',res);
           if(res == true){
             Alert.alert("ERROR:",'Não foi possivel registrar a presença, favor tentar novamente.');
           }else{
@@ -111,7 +115,7 @@ export default function Dashboard({ navigation }) {
           }
 
         });
-        console.log('******MARCACAO: ',marcacao);
+        
       } catch (error) {
         console.log('******ERROR_MARCACAO: ',error)
       }
@@ -186,8 +190,8 @@ export default function Dashboard({ navigation }) {
                 </View>
                 {habilitarMarcacao == true ? (<Button style={styles.buttonPresenca} mode="contained" onPress={() => btnMarcarPresenca()}>
                   Marcar presença
-                </Button>) : (<Button style={styles.buttonPresenca}  enabled="false" mode="contained" disabled={true}>
-                  Disciplina não liberada
+                </Button>) : (<Button style={styles.buttonPresenca}  enabled="false" mode="contained" onPress={() => validaDiciplina()}>
+                  Verificar Liberação
                 </Button>)}
                 
               </View>

@@ -17,23 +17,15 @@ export async function marcarPresenca(aluno,disciplina,tipo,horario){
             horario: horario
         })
     })
-    .then(response => { return response;})
-    .then(responseData => {
+    .then(response => { return response.json();})
+    .then(data => {
         //let resultado = 0;
-        //console.log(responseData[0].vazio);
-        if(responseData == 'Entrada Registrada Com Sucesso!'){
-            //setDisc('Sem Disciplinas Neste Horário');
+        console.log('******data: ',data.result);
+        if(data.result == true){
             global.d = false;
         }else{
-            //setDisc(responseData);
             global.d = true;
-            //return responseData;
-            //console.log('*****global.d: ',global.d)
         }
-        //console.log(responseData);
-       // setJdisciplina(responseData);
-        
-        //return resultado;
     })
 
     .catch(err => {
