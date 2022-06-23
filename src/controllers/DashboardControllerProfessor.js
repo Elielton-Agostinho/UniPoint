@@ -29,10 +29,10 @@ export async function Horario(matricula){
     } else {
         if (horario > parseFloat('12.59') && horario < parseFloat('18.30')) {
             parte1 = 'T';
-            if (horario > parseFloat('12.59') && horario < parseFloat('15:31')) {
+            if (horario > parseFloat('12.59') && horario < parseFloat('15.31')) {
                 parte3 = 'AB';
             }else{
-                if (horario > parseFloat('15.30') && horario < parseFloat('18:30')) {
+                if (horario > parseFloat('15.30') && horario < parseFloat('18.30')) {
                     parte3 = 'CD';
                 }else{parte3 = 'EF';}
             }
@@ -47,7 +47,7 @@ export async function Horario(matricula){
     }
 
     parte2 = parte1+''+(dSemana+1)+''+parte3;
-
+    console.log('*****Horário: ', horario);
     console.log(parte2);
     var disc = "0";
     try { 

@@ -78,7 +78,8 @@ export default function Dashboard({ navigation }) {
   
   useEffect(() => {
     prerender();
-  },[hora]);
+    console.log('********HORA:',hora);
+  },[nome]);
 
   async function ponto(){
     let arrayOb = [];
@@ -175,7 +176,7 @@ export default function Dashboard({ navigation }) {
           <Text style={styles.textLocalization}>Sua Localização: </Text>
           <View style={styles.viewLocalizacao}>
             <Image style={styles.menuIcon} source={require('../assets/pin.png')} />  
-            <Text>Av. Antônio Justa, 3779 - Meireles - Fortaleza</Text>
+            <Text>Rua Dona Leopoldina, 1150 - Centro - Fortaleza</Text>
           </View>
           <View style={{top:'89%'}}>
             {hora == false ? null : (

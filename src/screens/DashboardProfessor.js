@@ -141,7 +141,7 @@ export default function DashboardProfessor({ navigation }) {
           <Text style={styles.textLocalization}>Sua Localização: </Text>
           <View style={styles.viewLocalizacao}>
             <Image style={styles.menuIcon} source={require('../assets/pin.png')} />  
-            <Text>Av. Antônio Justa, 3779 - Meireles - Fortaleza</Text>
+            <Text>Rua Dona Leopoldina, 1150 - Centro - Fortaleza</Text>
           </View>
           <View style={{top:'80%'}}>
             {hora == false ? null : (

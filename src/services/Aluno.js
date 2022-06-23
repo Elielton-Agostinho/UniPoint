@@ -33,7 +33,7 @@ async function getDisciplina(login,disciplina){
             //return responseData;
             //console.log('*****global.d: ',global.d)
         }
-        //console.log(responseData);
+        console.log(responseData);
        // setJdisciplina(responseData);
         
         //return resultado;
